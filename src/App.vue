@@ -1,53 +1,57 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-import TheWelcome from './components/TheWelcome.vue';
+import { ref } from 'vue';
+import EmployeeAdd from './components/EmployeeAdd.vue';
+import EmployeesList from './components/EmployeesList.vue';
+
+export interface Employee {
+	name: string;
+	salary: string;
+	id: number;
+}
+
+let employeesList = ref<Employee[]>([
+	{ name: 'Mark', salary: '1000', id: 0 },
+	{ name: 'Nike', salary: '2000', id: 1 },
+	{ name: 'Sam', salary: '5000', id: 2 },
+]);
+
+const addEmployee = (item: Employee): void => {
+	employeesList.value.push(item);
+};
+
+const removeEmployee = (id: number): void => {
+	employeesList.value = employeesList.value.filter(
+		employee => employee.id != id
+	);
+};
+
+let modalShow = ref<boolean>(false);
+const toggleModal = (): void => {
+	modalShow.value = !modalShow.value;
+};
 </script>
 
 <template>
-	<header>
-		<img
-			alt="Vue logo"
-			class="logo"
-			src="./assets/logo.svg"
-			width="125"
-			height="125"
+	<main class="main">
+		<EmployeeAdd
+			@add="addEmployee"
+			:modal-show="modalShow"
+			@toggle-modal="toggleModal"
 		/>
-
-		<div class="wrapper">
-			<HelloWorld msg="You did it!" />
-		</div>
-	</header>
-
-	<main>
-		<TheWelcome />
+		<hr />
+		<EmployeesList :list="employeesList" @remove="removeEmployee" />
 	</main>
 </template>
 
-<style scoped>
-header {
-	line-height: 1.5;
-}
-
-.logo {
-	display: block;
-	margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-	header {
-		display: flex;
-		place-items: center;
-		padding-right: calc(var(--section-gap) / 2);
-	}
-
-	.logo {
-		margin: 0 2rem 0 0;
-	}
-
-	header .wrapper {
-		display: flex;
-		place-items: flex-start;
-		flex-wrap: wrap;
-	}
+<style scoped lang="scss">
+.main {
+	width: 90vw;
+	min-height: 100%;
+	background-color: aquamarine;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 20px;
+	gap: 10px;
 }
 </style>

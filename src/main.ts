@@ -1,6 +1,11 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import UI from './components/UI';
 
-import './assets/main.css';
+import './index.scss';
 
-createApp(App).mount('#app');
+const app = createApp(App);
+
+UI.forEach(uiComponent => app.component(uiComponent.name, uiComponent));
+
+app.mount('#app');
